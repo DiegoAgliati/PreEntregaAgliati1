@@ -8,7 +8,7 @@
     "status": true,
     "stock": 50,
     "category": "Periféricos",
-    "thumbnails": ["images/mouse1.jpg", "images/mouse2.jpg"]
+    "thumbnails": ["images/mouse1.jpg"]
   },
   {
     "id": "ae294b04-d9cc-458b-a8cd-75f48c4cb4c7",
@@ -19,7 +19,7 @@
     "status": true,
     "stock": 30,
     "category": "Periféricos",
-    "thumbnails": ["images/teclado1.jpg", "images/teclado2.jpg"]
+    "thumbnails": ["images/teclado1.jpg"]
   },
   {
     "id": "67de5604-4c71-4d3a-9e9b-9488647ab7e5",
@@ -41,7 +41,7 @@
     "status": true,
     "stock": 15,
     "category": "Mobiliario",
-    "thumbnails": ["images/silla1.jpg", "images/silla2.jpg"]
+    "thumbnails": ["images/silla1.jpg"]
   },
   {
     "id": "aa3e829f-dabf-4b1b-9223-fb3c6020b8ee",
