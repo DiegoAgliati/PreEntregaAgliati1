@@ -1,0 +1,69 @@
+.realtime-products {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .realtime-products h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .realtime-products .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .realtime-products .form-container,
+  .realtime-products .product-list-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 48%;
+  }
+  
+  .realtime-products form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .realtime-products form input,
+  .realtime-products form textarea,
+  .realtime-products form button {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .realtime-products form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .realtime-products form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .realtime-products .product-list-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .realtime-products .product-list-container li {
+    background: #e9ecef;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  

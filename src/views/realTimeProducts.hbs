@@ -1,48 +1,78 @@
-<h1>{{title}}</h1>
-<ul id="product-list">
-  <!-- Los productos se agregarán dinámicamente aquí -->
-</ul>
+<div class="realtime-products">
+  <link rel="stylesheet" href="/css/realtimeproducts.css">
+  <h1>{{title}}</h1>
+
+  <div class="container">
+    <div class="form-container">
+      <h2>Agregar Producto</h2>
+      <form id="product-form">
+        <label for="title">Nombre:</label>
+        <input type="text" id="title" placeholder="Nombre del producto" required /><br />
+
+        <label for="description">Descripción:</label>
+        <textarea id="description" placeholder="Descripción del producto" required></textarea><br />
+
+        <label for="price">Precio:</label>
+        <input type="number" id="price" placeholder="Precio del producto" required /><br />
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" placeholder="Cantidad en stock" required /><br />
+
+        <label for="category">Categoría:</label>
+        <input type="text" id="category" placeholder="Categoría del producto" required /><br />
+
+        <label for="thumbnails">Imágenes (separadas por comas):</label>
+        <input type="text" id="thumbnails" placeholder="Ruta de imágenes" /><br />
+
+        <button type="submit">Agregar Producto</button>
+      </form>
+    </div>
+
+    <!-- Lista de productos -->
+    <div class="product-list-container">
+      <h2>Lista de Productos</h2>
+      <ul id="product-list"></ul>
+    </div>
+  </div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const socket = io("http://localhost:5000");
 
-  // Manejo de conexión exitosa
+  // Conexión al servidor Socket.IO
   socket.on("connect", () => {
     console.log("Conectado al servidor Socket.IO con ID:", socket.id);
   });
 
-  // Manejo de errores de conexión
-  socket.on("connect_error", (error) => {
-    console.error("Error al conectar con Socket.IO:", error);
-  });
-
-  // Capturar errores generales en eventos
-  socket.on("error", (error) => {
-    console.error("Error recibido desde el servidor:", error);
-  });
-
-  // Evento para agregar un producto
+  // Renderizar productos al recibir eventos
   socket.on("product-added", (product) => {
-    try {
-      const productList = document.getElementById("product-list");
-      const productItem = document.createElement("li");
-      productItem.innerHTML = `<strong>${product.title}</strong> - $${product.price}`;
-      productList.appendChild(productItem);
-      console.log("Producto agregado:", product);
-    } catch (err) {
-      console.error("Error al procesar el producto agregado:", err);
-    }
+    const productList = document.getElementById("product-list");
+    const productItem = document.createElement("li");
+    productItem.innerHTML = `<strong>${product.title}</strong> - $${product.price}`;
+    productList.appendChild(productItem);
   });
 
-  // Evento para eliminar un producto
+  // Manejar envío del formulario
+  const productForm = document.getElementById("product-form");
+  productForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const product = {
+      title: document.getElementById("title").value,
+      description: document.getElementById("description").value,
+      price: parseFloat(document.getElementById("price").value),
+      stock: parseInt(document.getElementById("stock").value, 10),
+      category: document.getElementById("category").value,
+      thumbnails: document.getElementById("thumbnails").value.split(","),
+    };
+
+    socket.emit("new-product", product);
+    productForm.reset();
+  });
+
+  // Notificación de productos eliminados
   socket.on("product-deleted", (product) => {
-    try {
-      alert(`El producto "${product.title}" fue eliminado.`);
-      console.log("Producto eliminado:", product);
-    } catch (err) {
-      console.error("Error al procesar el producto eliminado:", err);
-    }
+    alert(`El producto "${product.title}" fue eliminado.`);
   });
 </script>
-

@@ -39,11 +39,20 @@ const messages = [];
 io.on("connection", (socket) => {
   console.log("New Client:", socket.id);
 
-  // Lógica para mensajes en tiempo real
-  socket.on("new-message", (data) => {
-    messages.push(data);
-    io.emit("messages", messages);
+  socket.on("new-product", async (product) => {
+    try {
+      const products = await productsFile.read();
+      product.id = uuidv4(); // Generar ID único
+      products.push(product);
+      await productsFile.write(products);
+
+      io.emit("product-added", product); // Emitir el nuevo producto a todos los clientes
+      console.log("Producto agregado:", product);
+    } catch (error) {
+      console.error("Error al agregar producto:", error);
+    }
   });
+
 
   socket.emit("messages", messages);
 
