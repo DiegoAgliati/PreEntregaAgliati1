@@ -1,13 +1,48 @@
-<h1>Productos en Tiempo Real</h1>
-<ul id="product-list"></ul>
+<h1>{{title}}</h1>
+<ul id="product-list">
+  <!-- Los productos se agregarán dinámicamente aquí -->
+</ul>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    const socket = io();
-    const productList = document.getElementById("product-list");
+  const socket = io("http://localhost:5000");
 
-    socket.on("product-update", (product) => {
-        const li = document.createElement("li");
-        li.textContent = `${product.name} - ${product.price}`;
-        productList.appendChild(li);
-    });
+  // Manejo de conexión exitosa
+  socket.on("connect", () => {
+    console.log("Conectado al servidor Socket.IO con ID:", socket.id);
+  });
+
+  // Manejo de errores de conexión
+  socket.on("connect_error", (error) => {
+    console.error("Error al conectar con Socket.IO:", error);
+  });
+
+  // Capturar errores generales en eventos
+  socket.on("error", (error) => {
+    console.error("Error recibido desde el servidor:", error);
+  });
+
+  // Evento para agregar un producto
+  socket.on("product-added", (product) => {
+    try {
+      const productList = document.getElementById("product-list");
+      const productItem = document.createElement("li");
+      productItem.innerHTML = `<strong>${product.title}</strong> - $${product.price}`;
+      productList.appendChild(productItem);
+      console.log("Producto agregado:", product);
+    } catch (err) {
+      console.error("Error al procesar el producto agregado:", err);
+    }
+  });
+
+  // Evento para eliminar un producto
+  socket.on("product-deleted", (product) => {
+    try {
+      alert(`El producto "${product.title}" fue eliminado.`);
+      console.log("Producto eliminado:", product);
+    } catch (err) {
+      console.error("Error al procesar el producto eliminado:", err);
+    }
+  });
 </script>
+

@@ -1,24 +1,22 @@
 import { Router } from "express";
-import FileManager from "../utils/fileManager.js"; // Asegúrate de que la ruta sea correcta
+import FileManager from "../utils/fileManager.js"; 
 import path from "path";
 
 const router = Router();
-const productsFile = new FileManager(path.resolve("./data/products.json")); // Ruta al archivo de productos
+const productsFile = new FileManager(path.resolve("./data/products.json")); 
 
-// Ruta para renderizar "home.hbs" con los productos
 router.get("/", async (req, res) => {
   try {
-    const products = await productsFile.read(); // Leer productos desde el archivo
+    const products = await productsFile.read();
     res.render("home", { 
       title: "Lista de Productos", 
-      products // Pasar productos a la vista
+      products
     });
   } catch (error) {
     res.status(500).json({ message: "Error al cargar la página", error });
   }
 });
 
-// Ruta para "realTimeProducts.hbs"
 router.get("/realtimeproducts", (req, res) => {
   res.render("realTimeProducts", { title: "Productos en Tiempo Real" });
 });
