@@ -4,142 +4,109 @@
     "title": "Mouse Gamer",
     "description": "Mouse inalámbrico con 7 botones programables y RGB",
     "code": "MG123",
-    "price": 32989,
+    "price": 32989.0,
     "status": true,
     "stock": 50,
     "category": "Periféricos",
-    "thumbnails": [
-      "images/mouse1.jpg"
-    ]
+    "thumbnails": ["images/mouse1.jpg"]
   },
   {
     "id": "ae294b04-d9cc-458b-a8cd-75f48c4cb4c7",
     "title": "Teclado Mecánico RGB",
     "description": "Teclado con switches rojos y retroiluminación RGB",
     "code": "TM456",
-    "price": 65989,
+    "price": 65989.0,
     "status": true,
     "stock": 30,
     "category": "Periféricos",
-    "thumbnails": [
-      "images/teclado1.jpg"
-    ]
+    "thumbnails": ["images/teclado1.jpg"]
   },
   {
     "id": "67de5604-4c71-4d3a-9e9b-9488647ab7e5",
     "title": "Monitor 24'' Full HD",
     "description": "Monitor con resolución Full HD y 75Hz de refresco",
     "code": "MN789",
-    "price": 131989,
+    "price": 131989.0,
     "status": true,
     "stock": 20,
     "category": "Monitores",
-    "thumbnails": [
-      "images/monitor1.jpg"
-    ]
+    "thumbnails": ["images/monitor1.jpg"]
   },
   {
     "id": "58f019c5-75c7-414e-9b35-78c2324b6e25",
     "title": "Silla Gamer Ergonómica",
     "description": "Silla ajustable con soporte lumbar y reposabrazos 4D",
     "code": "SG101",
-    "price": 219989,
+    "price": 219989.0,
     "status": true,
     "stock": 15,
     "category": "Mobiliario",
-    "thumbnails": [
-      "images/silla1.jpg"
-    ]
+    "thumbnails": ["images/silla1.jpg"]
   },
   {
     "id": "aa3e829f-dabf-4b1b-9223-fb3c6020b8ee",
     "title": "Auriculares Inalámbricos",
     "description": "Auriculares con micrófono y cancelación de ruido",
     "code": "AI202",
-    "price": 87989,
+    "price": 87989.0,
     "status": true,
     "stock": 25,
     "category": "Audio",
-    "thumbnails": [
-      "images/auriculares1.jpg"
-    ]
+    "thumbnails": ["images/auriculares1.jpg"]
   },
   {
     "id": "3b24c255-e67d-486c-bae4-f5323082100c",
     "title": "Micrófono USB Profesional",
     "description": "Micrófono condensador con calidad de estudio",
     "code": "MU303",
-    "price": 98989,
+    "price": 98989.0,
     "status": true,
     "stock": 10,
     "category": "Audio",
-    "thumbnails": [
-      "images/microfono1.jpg"
-    ]
+    "thumbnails": ["images/microfono1.jpg"]
   },
   {
     "id": "6a52cddd-837c-4bd6-906d-c58db362bade",
     "title": "Disco SSD 1TB",
     "description": "Unidad de almacenamiento SSD con alta velocidad de lectura",
     "code": "SD404",
-    "price": 142989,
+    "price": 142989.0,
     "status": true,
     "stock": 40,
     "category": "Almacenamiento",
-    "thumbnails": [
-      "images/ssd1.jpg"
-    ]
+    "thumbnails": ["images/ssd1.jpg"]
   },
   {
     "id": "25a61493-f53d-44bd-b013-cd458018b913",
     "title": "Tarjeta Gráfica RTX 3060",
     "description": "GPU con 12GB de VRAM GDDR6 y ray tracing",
     "code": "TG505",
-    "price": 439989,
+    "price": 439989.0,
     "status": true,
     "stock": 8,
     "category": "Hardware",
-    "thumbnails": [
-      "images/gpu1.jpg"
-    ]
+    "thumbnails": ["images/gpu1.jpg"]
   },
   {
     "id": "e212f76a-4c08-4659-9866-ad7a647313a3",
     "title": "Procesador Ryzen 5 5600X",
     "description": "CPU de 6 núcleos y 12 hilos con frecuencia turbo",
     "code": "PR606",
-    "price": 241989,
+    "price": 241989.0,
     "status": true,
     "stock": 12,
     "category": "Hardware",
-    "thumbnails": [
-      "images/cpu1.jpg"
-    ]
+    "thumbnails": ["images/cpu1.jpg"]
   },
   {
     "id": "7f07b300-1da2-49a1-83bd-333ed23fc89d",
     "title": "Fuente de Poder 750W 80 Plus",
     "description": "Fuente de poder con certificación 80 Plus Gold",
     "code": "FP707",
-    "price": 109989,
+    "price": 109989.0,
     "status": true,
     "stock": 18,
     "category": "Hardware",
-    "thumbnails": [
-      "images/fuente1.jpg"
-    ]
-  },
-  {
-    "title": "Monitor Gaming UltraWide",
-    "description": "Monitor de 34 pulgadas con resolución 3440x1440, 144Hz, tiempo de respuesta 1ms y tecnología G-Sync.",
-    "code": "MGUW3440",
-    "price": 105999,
-    "status": true,
-    "stock": 20,
-    "category": "Monitores",
-    "thumbnails": [
-      "images/monitorwide.jpg"
-    ],
-    "id": "76d47e5b-04b4-4806-9898-ee978df8f13d"
+    "thumbnails": ["images/fuente1.jpg"]
   }
 ]

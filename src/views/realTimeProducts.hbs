@@ -1,78 +1,13 @@
-<div class="realtime-products">
-  <link rel="stylesheet" href="/css/realtimeproducts.css">
-  <h1>{{title}}</h1>
-
-  <div class="container">
-    <div class="form-container">
-      <h2>Agregar Producto</h2>
-      <form id="product-form">
-        <label for="title">Nombre:</label>
-        <input type="text" id="title" placeholder="Nombre del producto" required /><br />
-
-        <label for="description">Descripción:</label>
-        <textarea id="description" placeholder="Descripción del producto" required></textarea><br />
-
-        <label for="price">Precio:</label>
-        <input type="number" id="price" placeholder="Precio del producto" required /><br />
-
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" placeholder="Cantidad en stock" required /><br />
-
-        <label for="category">Categoría:</label>
-        <input type="text" id="category" placeholder="Categoría del producto" required /><br />
-
-        <label for="thumbnails">Imágenes (separadas por comas):</label>
-        <input type="text" id="thumbnails" placeholder="Ruta de imágenes" /><br />
-
-        <button type="submit">Agregar Producto</button>
-      </form>
-    </div>
-
-    <!-- Lista de productos -->
-    <div class="product-list-container">
-      <h2>Lista de Productos</h2>
-      <ul id="product-list"></ul>
-    </div>
-  </div>
-</div>
-
+<h1>Productos en Tiempo Real</h1>
+<ul id="product-list"></ul>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io("http://localhost:5000");
-
-  // Conexión al servidor Socket.IO
-  socket.on("connect", () => {
-    console.log("Conectado al servidor Socket.IO con ID:", socket.id);
-  });
-
-  // Renderizar productos al recibir eventos
-  socket.on("product-added", (product) => {
+    const socket = io();
     const productList = document.getElementById("product-list");
-    const productItem = document.createElement("li");
-    productItem.innerHTML = `<strong>${product.title}</strong> - $${product.price}`;
-    productList.appendChild(productItem);
-  });
 
-  // Manejar envío del formulario
-  const productForm = document.getElementById("product-form");
-  productForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const product = {
-      title: document.getElementById("title").value,
-      description: document.getElementById("description").value,
-      price: parseFloat(document.getElementById("price").value),
-      stock: parseInt(document.getElementById("stock").value, 10),
-      category: document.getElementById("category").value,
-      thumbnails: document.getElementById("thumbnails").value.split(","),
-    };
-
-    socket.emit("new-product", product);
-    productForm.reset();
-  });
-
-  // Notificación de productos eliminados
-  socket.on("product-deleted", (product) => {
-    alert(`El producto "${product.title}" fue eliminado.`);
-  });
+    socket.on("product-update", (product) => {
+        const li = document.createElement("li");
+        li.textContent = `${product.name} - ${product.price}`;
+        productList.appendChild(li);
+    });
 </script>
