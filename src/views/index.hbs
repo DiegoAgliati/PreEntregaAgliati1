@@ -1,12 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<a href="/" class="banner-link">
+  <img src="/images/banner.jpg" alt="Volver al inicio" class="banner">
+</a>
+{{#if payload.length}}
 
-    <title>Inicio</title>
-</head>
-<body>
-    <h1>Bienvenido a la página principal</h1>
-</body>
-</html>
+  <form action="/" method="GET" class="search-bar">
+    <input type="text" id="search-input" name="query" placeholder="Buscar producto" value="{{query}}">
+    <select id="sort-select" name="sort">
+      <option value="none" selected>Ordenar por Precio</option>
+      <option value="asc">Menor a Mayor</option>
+      <option value="desc">Mayor a Menor</option>
+    </select>
+  </form>
+  <div class="container">
+    <div class="filters">
+      {{> filters categories=categories }}
+    </div>
+    <div class="products-container" id="products-container">
+        {{#each payload}}
+          <div class="card" data-title="{{this.title}}" data-price="{{this.price}}">
+            <img src="{{#if this.thumbnails.length}}/{{this.thumbnails.[0]}}{{else}}/images/default.jpg{{/if}}" alt="{{this.title}}" onerror="this.onerror=null;this.src='/images/default.jpg';">
+            <h3>{{this.title}}</h3>
+            <p>{{this.description}}</p>
+            <p>Precio: ${{this.price}}</p>
+            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+          </div>
+        {{/each}}
+    </div>
+  </div>
+  <div class="pagination">
+    {{#if hasPrevPage}}
+      <a href="/?page={{prevPage}}&limit={{limit}}&sort={{sort}}&query={{query}}">Anterior</a>
+    {{/if}}
+    <span>Página {{page}} de {{totalPages}}</span>
+    {{#if hasNextPage}}
+      <a href="/?page={{nextPage}}&limit={{limit}}&sort={{sort}}&query={{query}}">Siguiente</a>
+    {{/if}}
+  </div>
+  <script>
+    document.getElementById('sort-select').addEventListener('change', function() {
+        this.form.submit();
+    });
+  </script>
+{{else}}
+  <p>No hay productos disponibles.</p>
+{{/if}}

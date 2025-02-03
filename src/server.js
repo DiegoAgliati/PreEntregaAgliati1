@@ -1,63 +1,60 @@
 import path from "path";
 import express from "express";
 import { Server } from "socket.io";
+import mongoose from "mongoose";
 import { engine } from "express-handlebars";
-import { __dirname } from "./dirname.js";
-import viewsRouter from "./routes/views.routes.js"; // Router de vistas
-import productsRouter from "./routes/products.routes.js"; // Router de productos
+import __dirname from "./dirname.js";
+import cartsRouter from "./routes/carts.routes.js";
+import viewsRouter from "./routes/views.routes.js";
+import productsRouter from "./routes/products.routes.js";
+import handlebars from "handlebars";
+
+handlebars.registerHelper("eq", function (a, b) {
+  return a === b;
+});
 
 const app = express();
-const server = app.listen(5000, () => {
-  console.log("Server running on port http://localhost:5000");
+const PORT = 5000;
+
+mongoose.connect("INGRESAR URL DE CONEXIÓN A MONGODB ATLAS", )
+    .then(() => console.log("✅ Conectado a MongoDB Atlas"))
+    .catch(err => console.error("❌ Error en la conexión a MongoDB:", err));
+
+const server = app.listen(PORT, () => {
+    console.log(`Server running on port http://localhost:${PORT}`);
 });
 
 const io = new Server(server);
 
-// Middleware
+io.on("connection", (socket) => {
+    console.log("🟢 Cliente conectado:", socket.id);
+    
+    socket.on("disconnect", () => {
+        console.log("🔴 Cliente desconectado:", socket.id);
+    });
+});
+
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Configuración de Handlebars
-app.engine(
-  "hbs",
-  engine({
+app.engine("hbs", engine({
     extname: ".hbs",
     defaultLayout: "main",
-  })
-);
+    partialsDir: path.join(__dirname, "views", "partials"),
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    }
+}));
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
-// Rutas
-app.use("/", viewsRouter); // Rutas para vistas
-app.use("/api/products", productsRouter(io)); // Rutas para productos
-
-// WebSocket: Configuración básica
-const messages = [];
-
-io.on("connection", (socket) => {
-  console.log("New Client:", socket.id);
-
-  socket.on("new-product", async (product) => {
-    try {
-      const products = await productsFile.read();
-      product.id = uuidv4(); // Generar ID único
-      products.push(product);
-      await productsFile.write(products);
-
-      io.emit("product-added", product); // Emitir el nuevo producto a todos los clientes
-      console.log("Producto agregado:", product);
-    } catch (error) {
-      console.error("Error al agregar producto:", error);
-    }
-  });
-
-
-  socket.emit("messages", messages);
-
-  // Notificar cuando un nuevo usuario se conecta
-  socket.on("new-user", (username) => {
-    socket.broadcast.emit("connected", `${username} connected`);
-  });
-});
+app.use("/", viewsRouter);
+app.use("/products", productsRouter);
+app.use("/api/carts", cartsRouter);

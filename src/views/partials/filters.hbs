@@ -1,0 +1,27 @@
+<aside class="sidebar">
+  <h3>Filtrar por Categoría</h3>
+  <ul>
+    {{#each categories}}
+      <li>
+        <a href="/products?category={{this}}&sort={{../sort}}&limit={{../limit}}&page=1" data-category="{{this}}">
+          {{this}}
+        </a>
+      </li>
+    {{/each}}
+  </ul>
+  <h3>Ordenar por Precio</h3>
+  <select id="priceFilter" onchange="applyFilter()">
+    <option value="none">Seleccionar</option>
+    <option value="asc" {{#if (eq ../sort "asc")}}selected{{/if}}>Menor Precio</option>
+    <option value="desc" {{#if (eq ../sort "desc")}}selected{{/if}}>Mayor Precio</option>
+  </select>
+</aside>
+
+<script>
+  function applyFilter() {
+    const selectedSort = document.getElementById("priceFilter").value;
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("sort", selectedSort);
+    window.location.href = `/products?${urlParams.toString()}`;
+  }
+</script>

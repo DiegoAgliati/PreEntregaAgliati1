@@ -1,0 +1,36 @@
+{{!-- Banner con enlace al inicio --}}
+<a href="/" class="banner-link">
+    <img src="/images/banner.jpg" alt="Tech Nexus" class="banner">
+</a>
+
+<div class="cart-container">
+    <h2 class="cart-title">Carrito de Compras</h2>
+    <ul class="cart-list">
+        {{#each products}}
+        <li class="cart-item">
+            <div>
+                <h3>{{this.product.title}}</h3>
+                <p>Precio: ${{this.product.price}}</p>
+                <p>Cantidad: {{this.quantity}}</p>
+            </div>
+            <button onclick="removeFromCart('{{this.product._id}}')" class="cart-button">Eliminar</button>
+        </li>
+        {{/each}}
+    </ul>
+    <p class="total-price">Total: ${{totalPrice}}</p>
+    <button onclick="clearCart()" class="cart-button">Vaciar Carrito</button>
+</div>
+
+<script>
+    function removeFromCart(productId) {
+        fetch(`/api/carts/{{cartId}}/products/${productId}`, { method: "DELETE" })
+            .then(response => response.json())
+            .then(() => location.reload());
+    }
+
+    function clearCart() {
+        fetch(`/api/carts/{{cartId}}`, { method: "DELETE" })
+            .then(response => response.json())
+            .then(() => location.reload());
+    }
+</script>

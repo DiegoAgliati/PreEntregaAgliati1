@@ -1,102 +1,57 @@
 import { Router } from "express";
-import FileManager from "../utils/fileManager.js"; // Importación con extensión .js
-import { v4 as uuidv4 } from "uuid";
-import path from "path";
+import Product from "../models/product.model.js";
 
-export default function productsRouter(io) {
-  const router = Router();
-  const productsFile = new FileManager(path.resolve("./data/products.json")); // Asegúrate de que este archivo existe
+const router = Router();
 
-  // Obtener todos los productos
-  router.get("/", async (req, res) => {
-    try {
-      const products = await productsFile.read();
-      res.json(products || []); // Devuelve un array vacío si no hay productos
-    } catch (error) {
-      res.status(500).json({ message: "Error al obtener los productos", error });
-    }
-  });
+router.get("/", async (req, res) => {
+  try {
+    let { category, sort, page = 1, limit = 10 } = req.query;
 
-  // Obtener un producto por ID
-  router.get("/:pid", async (req, res) => {
-    const { pid } = req.params;
-    try {
-      const products = await productsFile.read();
-      const product = products.find((p) => p.id === pid);
-      product ? res.json(product) : res.status(404).json({ message: "Producto no encontrado" });
-    } catch (error) {
-      res.status(500).json({ message: "Error al obtener el producto", error });
-    }
-  });
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
 
-  // Crear un nuevo producto
-  router.post("/", async (req, res) => {
-    try {
-      const product = req.body;
-      const products = await productsFile.read();
-
-      product.id = uuidv4(); // Genera un ID único para el producto
-      product.status = true; // Propiedad adicional para marcarlo como activo
-      products.push(product);
-
-      await productsFile.write(products);
-
-      // Emitir evento a través de WebSocket
-      io.emit("product-added", product);
-
-      res.status(201).json(product);
-    } catch (error) {
-      res.status(500).json({ message: "Error al crear el producto", error });
-    }
-  });
-
-  // Actualizar un producto por ID
-  router.put("/:pid", async (req, res) => {
-    const { pid } = req.params;
-    const updateData = req.body;
-    try {
-      const products = await productsFile.read();
-      const index = products.findIndex((p) => p.id === pid);
-
-      if (index !== -1) {
-        products[index] = { ...products[index], ...updateData, id: products[index].id };
-        await productsFile.write(products);
-
-        // Emitir evento de actualización a través de WebSocket
-        io.emit("product-updated", products[index]);
-
-        res.json(products[index]);
-      } else {
-        res.status(404).json({ message: "Producto no encontrado" });
-      }
-    } catch (error) {
-      res.status(500).json({ message: "Error al actualizar el producto", error });
-    }
-  });
-
-  // Eliminar un producto por ID
-  router.delete("/:pid", async (req, res) => {
-    const { pid } = req.params;
-    try {
-      let products = await productsFile.read();
-      const productExists = products.some((p) => p.id === pid);
-
-      if (productExists) {
-        const deletedProduct = products.find((p) => p.id === pid);
-        products = products.filter((p) => p.id !== pid);
-        await productsFile.write(products);
-
-        // Emitir evento de eliminación a través de WebSocket
-        io.emit("product-deleted", deletedProduct);
-
-        res.json({ message: "Producto eliminado" });
-      } else {
-        res.status(404).json({ message: "Producto no encontrado" });
-      }
-    } catch (error) {
-      res.status(500).json({ message: "Error al eliminar el producto", error });
-    }
-  });
-
-  return router; // Asegúrate de retornar el router aquí
+    let filter = {};
+    if (category && category !== "null") {
+    filter.category = { $regex: new RegExp("^" + category + "$", "i") };
 }
+
+
+    let sortOptions = {};
+
+    if (sort === "asc") sortOptions.price = 1;
+    if (sort === "desc") sortOptions.price = -1;
+
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    const products = await Product.find(filter)
+      .limit(limit)
+      .skip((page - 1) * limit)
+      .sort(sortOptions)
+      .lean();
+
+    const categories = await Product.distinct("category");
+
+    res.render("index", {
+      payload: products,
+      page,
+      totalPages,
+      hasPrevPage: page > 1,
+      hasNextPage: page < totalPages,
+      prevPage: page > 1 ? page - 1 : 1,
+      nextPage: page < totalPages ? page + 1 : totalPages,
+      categories,
+      sort: sort || "none",
+      query: category || "",
+      limit,
+    });
+  } catch (error) {
+    console.error("Error en la API:", error);
+    res.status(500).json({
+      message: "Error al obtener los productos",
+      error: error.message,
+    });
+  }
+});
+
+export default router;
